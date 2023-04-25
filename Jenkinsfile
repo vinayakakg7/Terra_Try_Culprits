@@ -6,6 +6,8 @@ pipeline {
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/vinayakakg7/Terra_Try_Culprits.git']]])
 
+                script {
+
                 // Retrieve the culprits
                 def changeLogSets = currentBuild.rawBuild.changeSets
                 def culprits = []
@@ -16,6 +18,7 @@ pipeline {
                         def author = bat (returnStdout: true, script: "git show -s --format='%an <%ae>' ${commit}")
                         culprits.add(author.trim())
                     }
+                  }
                 }
 
                 // Send the email
