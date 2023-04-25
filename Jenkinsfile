@@ -28,7 +28,7 @@ pipeline {
                 emailext (
                     to: "vinayaka.kg@cyqurex.com",
                     subject: "Build notification",
-                    body: "Build triggered by ${CHANGE_AUTHOR} has completed. Culprits: ${culprits.join(', ')}",
+                    body: "Build triggered by ${env.CHANGE_AUTHOR} has completed. Culprits: ${culprits.join(', ')}",
                     attachLog: true
                 )
             }
