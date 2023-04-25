@@ -10,11 +10,8 @@ pipeline {
         stage('Build') {
             steps {
 				echo "Build successfull"
-            }
-        }
-        stage('Email') {
-            steps {
-                script {
+
+                 script {
                 // Retrieve the author of the most recent commit
                    def author = bat (returnStdout: true, script: 'git log -1 --pretty=format:"%an <%ae>"')
 
@@ -24,7 +21,8 @@ pipeline {
                          body: "Build triggered by ${env.CHANGE_AUTHOR} has completed. The author of the most recent commit is ${author}.",
                          attachLog: true
             }
-         }
+            }
         }
+    
     }
 }
