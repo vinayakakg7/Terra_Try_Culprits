@@ -13,13 +13,22 @@ pipeline {
 
                  script {
                  // Retrieve the author of the most recent commit
-                def author = bat(returnStdout: true, script: 'git log -1 --pretty=format:%an <%ae>')
+                def changeLogSets = currentBuild.rawBuild.changeSets
+                def culprits = []
+
+                for (changeLogSet in changeLogSets) {
+                    for (entry in changeLogSet) {
+                        def commit = entry.commitId
+                        def author = bat (returnStdout: true, script: "git show -s --format='%an <%ae>' ${commit}")
+                        culprits.add(author.trim())
+                    }
+                }
 
                 // Send the email
                 emailext (
                     to: "vinayaka.kg@cyqurex.com",
                     subject: "Build notification",
-                    body: "Build triggered by ${env.CHANGE_AUTHOR} has completed. The author of the most recent commit is ${author}.",
+                    body: "Build triggered by ${CHANGE_AUTHOR} has completed. Culprits: ${culprits.join(', ')}",
                     attachLog: true
                 )
             }
