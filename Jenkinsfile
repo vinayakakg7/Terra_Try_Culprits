@@ -13,7 +13,7 @@ pipeline {
 
                  script {
                  // Retrieve the author of the most recent commit
-                def author = bat returnStdout: true, script: 'git log -1 --pretty=format:%an <%ae>'
+                def author = bat(returnStdout: true, script: 'git log -1 --pretty=format:%an <%ae>')
 
                 // Send the email
                 emailext (
