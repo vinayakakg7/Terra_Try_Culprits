@@ -19,12 +19,10 @@ pipeline {
                    def author = bat (returnStdout: true, script: 'git log -1 --pretty=format:"%an <%ae>"')
 
                 // Send the email
-                emailext (
-                    to: "vinayaka.kg@cyqurex.com",
-                    subject: "Build notification",
-                    body: "Build triggered by ${env.CHANGE_AUTHOR} has completed. The author of the most recent commit is ${author}.",
-                    attachLog: true
-                )
+                emailext mailto: "vinayaka.kg@cyqurex.com",
+                         subject: "Build notification",
+                         body: "Build triggered by ${env.CHANGE_AUTHOR} has completed. The author of the most recent commit is ${author}.",
+                         attachLog: true
             }
          }
         }
