@@ -18,7 +18,7 @@ pipeline {
                         for (changeLogSet in changeLogSets) {
                             for (entry in changeLogSet) {
                                 def commit = entry.commitId
-                                def author = bat (returnStdout: true, script: "git show -s --format='%an <%ae>' ${commit}")
+                                def author = bat(returnStdout: true, script: "git show -s --format='%an <%aE>' ${commit}")
                                 echo "Commit: ${commit}, Author: ${author}"
                                 culprits.add(author.trim())
                             }
