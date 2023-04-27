@@ -23,7 +23,7 @@ pipeline {
                 }
                  
                 emailext (
-                         body: '''${CHANGES_SINCE_LAST_SUCCESS, format="<br>- %a: %r"}''',
+                         body: "${CHANGES_SINCE_LAST_SUCCESS}",
                          //body: "${env.commit_info}", 
                          subject: 'Latest Commit Information',
                          to: 'vinayaka.kg@cyqurex.com',
