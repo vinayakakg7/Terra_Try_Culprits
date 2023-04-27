@@ -11,9 +11,9 @@ pipeline {
             steps {
                 script {
                     def git = bat(returnStdout: true, script: 'git rev-parse HEAD').trim()
-                    def author = bat(returnStdout: true, script: 'git log -1 --pretty=format:"%h %an"').trim()
+                    def author_name = bat(returnStdout: true, script: 'git log -1 --pretty=format:"%an"').trim()
                  //   def message = bat(returnStdout: true, script: 'git log -1 --pretty="%s"').trim()
-                    def commit_info = "Last Commit:\nAuthor: ${author}\nMessage: ${message}\nCommit SHA: ${git}"
+                    def commit_info = "Last Commit:\nAuthor: ${author_name}\nMessage: \nCommit SHA: ${git}"
                     env.commit_info = commit_info
                 }
             }
