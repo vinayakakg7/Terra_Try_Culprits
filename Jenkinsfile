@@ -7,14 +7,12 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/vinayakakg7/Terra_Try_Culprits.git']]])
             }
         }
-        stage('Get Latest Commit') {
+       stage('Retrieve Latest Commit Information') {
             steps {
                 script {
-                    def git = bat(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                    def commit_hash = bat(returnStdout: true, script: 'git rev-parse HEAD').trim()
                     def author_name = bat(returnStdout: true, script: 'git log -1 --pretty=format:"%an"').trim()
-                 //   def message = bat(returnStdout: true, script: 'git log -1 --pretty="%s"').trim()
-                    def commit_info = "Last Commit:\nAuthor: ${author_name}\nMessage: \nCommit SHA: ${git}"
-                    env.commit_info = commit_info
+                    env.commit_info = "Last Commit:\nAuthor: ${author_name}\n\nMessage:\nCommit SHA: ${commit_hash}"
                 }
             }
         }
