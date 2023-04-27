@@ -7,33 +7,24 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/vinayakakg7/Terra_Try_Culprits.git']]])
             }
         }
-        stage('Build') {
+        stage('Get Latest Commit') {
             steps {
-				echo "Build successfull"
                 script {
-                 // Retrieve the author of the most recent commit
-                        def changeLogSets = currentBuild.rawBuild.changeSets
-                        def culprits = []
-
-                        for (changeLogSet in changeLogSets) {
-                            for (entry in changeLogSet) {
-                                def commit = entry.commitId
-                                def author = bat(returnStdout: true, script: "git show -s --format='%an <%aE>' ${commit}")
-                                echo "Commit: ${commit}, Author: ${author}"
-                                culprits.add(author.trim())
-                            }
-                        }
-
-                            // Send the email
-                            emailext (
-                                to: "",
-                                subject: "Build notification",
-                                body: "Build triggered by ${env.CHANGE_AUTHOR} has completed. Culprits: ${culprits.join(', ')}",
-                                attachLog: true
-                            )
+                    def git = bat(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                    def author = bat(returnStdout: true, script: 'git log -1 --format="%an"').trim()
+                    def message = bat(returnStdout: true, script: 'git log -1 --format="%s"').trim()
+                    def commit_info = "Last Commit:\nAuthor: ${author}\nMessage: ${message}\nCommit SHA: ${git}"
+                    env.commit_info = commit_info
                 }
             }
         }
-    
+        stage('Send Email Notification') {
+            steps {
+                emailext subject: 'Latest Commit Information',
+                         body: "${env.commit_info}",
+                         to: 'vinayaka.kg@cyqurex.com'
+            }
+        }
+        
     }
 }
