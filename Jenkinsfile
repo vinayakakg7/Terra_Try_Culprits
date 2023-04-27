@@ -10,8 +10,8 @@ pipeline {
        stage('Retrieve Latest Commit Information') {
             steps {
                 script {
-                    def commit_hash = bat(returnStdout: true, script: 'git rev-parse HEAD').trim()
-                    def author_name = bat(returnStdout: true, script: 'git log -1 --pretty=format:"%an"').trim()
+                    def commit_hash = bat(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    def author_name = bat(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
                     env.commit_info = "Last Commit:\nAuthor: ${author_name}\n\nMessage:\nCommit SHA: ${commit_hash}"
                 }
             }
