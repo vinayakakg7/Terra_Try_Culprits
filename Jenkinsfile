@@ -10,28 +10,28 @@ pipeline {
         stage('Build') {
             steps {
 				echo "Build successfull"
-
-                 script {
+                script {
                  // Retrieve the author of the most recent commit
-                def changeLogSets = currentBuild.rawBuild.changeSets
-                def culprits = []
+                        def changeLogSets = currentBuild.rawBuild.changeSets
+                        def culprits = []
 
-                for (changeLogSet in changeLogSets) {
-                    for (entry in changeLogSet) {
-                        def commit = entry.commitId
-                        def author = bat (returnStdout: true, script: "git show -s --format='%an <%ae>' ${commit}")
-                        culprits.add(author.trim())
-                    }
+                        for (changeLogSet in changeLogSets) {
+                            for (entry in changeLogSet) {
+                                def commit = entry.commitId
+                                def author = bat (returnStdout: true, script: "git show -s --format='%an <%ae>' ${commit}")
+                                echo "Commit: ${commit}, Author: ${author}"
+                                culprits.add(author.trim())
+                            }
+                        }
+
+                            // Send the email
+                            emailext (
+                                to: "",
+                                subject: "Build notification",
+                                body: "Build triggered by ${env.CHANGE_AUTHOR} has completed. Culprits: ${culprits.join(', ')}",
+                                attachLog: true
+                            )
                 }
-
-                // Send the email
-                emailext (
-                    to: "vinayaka.kg@cyqurex.com",
-                    subject: "Build notification",
-                    body: "Build triggered by ${env.CHANGE_AUTHOR} has completed. Culprits: ${culprits.join(', ')}",
-                    attachLog: true
-                )
-            }
             }
         }
     
