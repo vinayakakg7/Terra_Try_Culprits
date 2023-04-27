@@ -18,9 +18,6 @@ pipeline {
         }
         stage('Send Email Notification') {
             steps {
-                script {
-                    echo "Changes since last success: ${CHANGES_SINCE_LAST_SUCCESS}"
-                }
                  
                 emailext (
                          body: "${CHANGES_SINCE_LAST_SUCCESS}",
