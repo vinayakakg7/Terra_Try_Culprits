@@ -19,9 +19,9 @@ pipeline {
         stage('Send Email Notification') {
             steps {
                 emailext subject: 'Latest Commit Information',
-                         body: "${env.commit_info}"  "${CHANGES_SINCE_LAST_SUCCESS, reverse=true, format="<br>- %a: %r"}",
+                         body: "${env.commit_info}", "${CHANGES_SINCE_LAST_SUCCESS, reverse=true, format="<br>- %a: %r"}",
                          to: 'vinayaka.kg@cyqurex.com',
-                         mimeType: 'text/html',
+                         mimeType: 'text/html'
             }
         }
         
