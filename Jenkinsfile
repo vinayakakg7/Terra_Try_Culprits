@@ -18,14 +18,16 @@ pipeline {
         }
         stage('Send Email Notification') {
             steps {
+                script {
                  
-                emailext (
-                         body: "${CHANGES_SINCE_LAST_SUCCESS}",
+                        def changes = CHANGES_SINCE_LAST_SUCCESS
+                        emailext body: "${changes}",
                          //body: "${env.commit_info}", 
                          subject: 'Latest Commit Information',
                          to: 'vinayaka.kg@cyqurex.com',
                          mimeType: 'text/html'
-                        )
+                }
+                        
             }
         }
         
